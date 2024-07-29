@@ -48,7 +48,9 @@
                                 </td>
                                 <td class="align-middle text-end">
                                     <div class="d-flex px-3 py-1 justify-content-center align-items-center">
-                                        <button type="button" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editUserModal" data-id="{{ $user->id }}">Edit</button>
+                                        <button type="button" class="btn btn-primary btn-sm me-2" onclick="editUser('{{ $user->id }}')">
+                                            Edit
+                                        </button>
                                         <a href="{{ route('profile.destroy', $user->id) }}" class="btn btn-danger btn-sm" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $user->id }}').submit();">Delete</a>
                                         <form id="delete-form-{{ $user->id }}" action="{{ route('profile.destroy', $user->id) }}" method="GET" style="display: none;">
                                             @csrf
@@ -130,10 +132,11 @@
                     </div>
                     <!-- Current photo preview -->
                     <div class="mb-3">
-                        <img id="current-photo" src="" alt="Current Photo" style="max-width: 100%; display: none;">
+                        <img id="current-photo" src="" alt="Current Photo" style="max-width: 100%; height: auto; display: none;">
                     </div>
                     <button type="submit" class="btn btn-primary">Update User</button>
                 </form>
+
             </div>
         </div>
     </div>
@@ -158,7 +161,6 @@
                 document.getElementById('edit-password').value = '';
 
                 // Mengisi foto jika ada
-                const photoInput = document.getElementById('edit-photo');
                 const photoElement = document.getElementById('current-photo');
                 if (data.photo) {
                     const photoUrl = `/storage/${data.photo}`;
@@ -167,6 +169,10 @@
                 } else {
                     photoElement.style.display = 'none';
                 }
+
+                // Update form action URL with the user id
+                const form = document.getElementById('edit-user-form');
+                form.action = `/profile-edit/${data.id}`;
 
                 // Menampilkan modal edit
                 new bootstrap.Modal(document.getElementById('editUserModal')).show();
